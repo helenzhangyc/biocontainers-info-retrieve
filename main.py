@@ -27,7 +27,6 @@ app_name = []
 for item in applications:
     app_name.append(item.text)
 
-
 # For each name, go to biocontainers.pro/tools/{name} to get the number of downloads
 downloads = []
 for name in app_name:
@@ -35,9 +34,13 @@ for name in app_name:
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     driver = webdriver.Chrome(options=chrome_options)
-    driver.implicitly_wait(10)
     driver.get(url)
+    try:
+        content = WebDriverWait(driver, 10).until(lambda driver: driver.find_element(By.CLASS_NAME, "property-content").text.strip() != '')
+    except:
+        pass
     content = driver.find_element(By.CLASS_NAME, "property-content")
+    print(content.text)
     downloads.append(content.text)
 
 
